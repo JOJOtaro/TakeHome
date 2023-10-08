@@ -32,6 +32,7 @@ class Company
     @top_up = top_up
     @email_status = email_status
     @users = []
+    @user_lookup = {}
     @total_top_up = 0
   end
 

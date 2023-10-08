@@ -3,7 +3,7 @@ require 'json-schema'
 class User
   include Comparable
 
-  attr_reader :last_name, :company_id, :active_status, :email_status
+  attr_reader :id, :last_name, :company_id, :active_status, :email_status
 
   class << self
     @@schema = {

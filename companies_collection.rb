@@ -6,7 +6,8 @@ require_relative 'custom_logger'
 class CompaniesCollection
   def initialize
     @companies = []
-    @company_look_up = {}
+    @company_look_up = {} #maintains uniqueness and fast lookup of companies
+    @user_look_up = {} #maintains uniqueness and fast lookup of users
   end
 
   def load_from_json(file_path)
@@ -16,6 +17,9 @@ class CompaniesCollection
     data_hash.each do |company_hash|
       new_company = Company.create_from_hash company_hash
       next unless new_company
+      if @company_look_up.key?(new_company.id)
+        CustomLogger.warn(message: "Company #{company_hash} cannot be added, id already exists")
+      end
       
       @company_look_up[new_company.id] = new_company
       
@@ -31,7 +35,14 @@ class CompaniesCollection
     data_hash.each do |user_hash|
       new_user = User.create_from_hash user_hash
       next unless new_user
+
       if @company_look_up.key?(new_user.company_id)
+        if @user_look_up.key?(new_user.id)
+          CustomLogger.warn(message: "User #{user_hash} cannot be added, id duplicate")
+          next
+        end
+        
+        @user_look_up[new_user.id] = new_user
         @company_look_up[new_user.company_id].add_user new_user
       else
         CustomLogger.warn(message: "User #{user_hash} cannot be added to company with id: #{new_user.company_id}")
