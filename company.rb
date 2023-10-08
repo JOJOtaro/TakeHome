@@ -36,12 +36,8 @@ class Company
   end
 
   def add_user(new_user)
-    insert_at = @users.bsearch_index { |user| user > new_user}
-    unless insert_at
-      @users << new_user
-    else
-      @users.insert(insert_at, new_user)
-    end
+    insert_at = @users.bsearch_index { |user| user > new_user} || @users.length
+    @users.insert(insert_at, new_user)
     
     if new_user.active_status
       new_user.top_up @top_up
@@ -60,9 +56,9 @@ class Company
     @users.select { |user| !user.email_status && user.active_status }.each{ |user| not_emailed_users += user.to_s}
     "  Company Id: #{@id}\n" + 
     "  Company Name: #{@name}\n" +
-    "  Users emailed:\n" +
+    "  Users Emailed:\n" +
     emailed_users + 
-    "  Users not emailed:\n" +
+    "  Users Not Emailed:\n" +
     not_emailed_users +
     "  Total amount of top ups for #{@name}: #{@total_top_up.to_s}\n\n"
   end

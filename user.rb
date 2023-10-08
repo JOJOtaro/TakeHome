@@ -57,7 +57,7 @@ class User
   def to_s
     "    " + @last_name + ", " + @first_name + ", " + @email + "\n" +
     "      Previous Token Balance, " + @previous_token_balance.to_s + "\n" +
-    "      New Token Balance " + @tokens.to_s + "\n"
+    "      New Token Balance, " + @tokens.to_s + "\n"
 
   end
 end

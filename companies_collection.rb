@@ -19,12 +19,8 @@ class CompaniesCollection
       
       @company_look_up[new_company.id] = new_company
       
-      insert_at = @companies.bsearch_index { |company| company > new_company}
-      unless insert_at
-        @companies << new_company
-      else
-        @companies.insert(insert_at, new_company)
-      end
+      insert_at = @companies.bsearch_index { |company| company > new_company} || @companies.length
+      @companies.insert(insert_at, new_company)
     end
   end
 
